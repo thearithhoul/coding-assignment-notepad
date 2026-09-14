@@ -1,0 +1,6 @@
+@notepad_backend_HostAddress = http://localhost:5063
+
+GET {{notepad_backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

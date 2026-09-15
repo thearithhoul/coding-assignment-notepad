@@ -1,0 +1,17 @@
+{
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft.AspNetCore": "Warning"
+        }
+    },
+    "AllowedHosts": "*",
+    "ConnectionStrings": {
+        "DefaultConnection": "Host=localhost;Port=5432;Database=notepad;Username=notepad;Password=notepad"
+    },
+    "Jwt": {
+        "Issuer": "app-issuer",
+        "Audience": "app-audience",
+        "SecretKey": "random-base64-key-string"
+    }
+}

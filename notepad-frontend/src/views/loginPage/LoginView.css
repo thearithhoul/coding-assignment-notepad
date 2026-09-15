@@ -1,0 +1,187 @@
+@reference '@/assets/main.css';
+
+.auth-page {
+  @apply flex min-h-screen w-full bg-white;
+}
+
+/* Left panel: form */
+
+.auth-panel-form {
+  @apply flex flex-1 flex-col justify-between gap-10 px-6 py-16 lg:px-10;
+}
+
+.auth-form-wrap {
+  @apply mx-auto flex w-full max-w-sm flex-col items-center;
+}
+
+.auth-brand-icon {
+  @apply mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-lg font-semibold text-white;
+}
+
+.auth-title {
+  @apply text-xl font-semibold text-slate-900;
+}
+
+.auth-subtitle {
+  @apply mt-2 text-center text-sm text-slate-500;
+}
+
+.auth-social-group {
+  @apply mt-8 flex w-full flex-col gap-3;
+}
+
+.btn-social {
+  @apply flex w-full items-center justify-center gap-3 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50;
+}
+
+.btn-social__icon {
+  @apply flex h-5 w-5 items-center justify-center rounded bg-slate-900 text-[11px] font-bold text-white;
+}
+
+.auth-divider {
+  @apply relative my-6 flex w-full items-center justify-center text-xs font-medium tracking-wide text-slate-400;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  @apply h-px flex-1 bg-slate-200;
+}
+
+.auth-divider span {
+  @apply px-3;
+}
+
+.auth-form {
+  @apply flex w-full flex-col gap-4;
+}
+
+.form-field {
+  @apply flex flex-col gap-1.5;
+}
+
+.form-label {
+  @apply text-sm font-medium text-slate-700;
+}
+
+.form-input {
+  @apply w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none;
+}
+
+.password-field {
+  @apply relative flex items-center;
+}
+
+.password-field .form-input {
+  @apply pr-14;
+}
+
+.password-toggle {
+  @apply absolute right-3 text-xs font-medium text-slate-400 hover:text-slate-600;
+}
+
+.form-error {
+  @apply flex items-center gap-1.5 text-xs font-medium text-red-600;
+}
+
+.form-error__icon {
+  @apply flex h-4 w-4 items-center justify-center rounded-full bg-red-100 text-[10px] text-red-600;
+}
+
+.form-row {
+  @apply flex items-center justify-between text-sm;
+}
+
+.checkbox-label {
+  @apply flex items-center gap-2 text-slate-600;
+}
+
+.checkbox-label input {
+  @apply h-4 w-4 rounded border-slate-300 accent-slate-900;
+}
+
+.link-muted {
+  @apply text-slate-500 hover:text-slate-700;
+}
+
+.btn-primary {
+  @apply mt-2 w-full rounded-lg bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.link-help {
+  @apply mt-6 text-sm font-medium text-slate-600 hover:text-slate-900;
+}
+
+.auth-footer {
+  @apply mx-auto max-w-sm text-center text-xs text-slate-400;
+}
+
+.auth-footer a {
+  @apply font-medium text-slate-600 hover:text-slate-900;
+}
+
+/* Right panel: showcase */
+
+.auth-panel-showcase {
+  @apply relative hidden flex-1 flex-col items-center justify-center overflow-hidden bg-slate-50 lg:flex;
+  background-image: radial-gradient(circle, rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.showcase-content {
+  @apply relative z-10 flex flex-col items-center text-center;
+}
+
+.showcase-title {
+  @apply text-2xl font-semibold text-slate-900;
+}
+
+.showcase-subtitle {
+  @apply mt-2 text-sm text-slate-500;
+}
+
+.node-diagram {
+  @apply relative mt-12 h-[360px] w-[360px];
+}
+
+.node-diagram__lines {
+  @apply absolute inset-0 h-full w-full;
+}
+
+.node-diagram__lines line {
+  stroke: #cbd5e1;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.node-diagram__grid {
+  @apply relative grid h-full w-full grid-cols-3 grid-rows-3 place-items-center;
+}
+
+.node {
+  @apply flex h-14 w-14 items-center justify-center rounded-2xl text-lg font-semibold shadow-sm;
+}
+
+.node--light {
+  @apply border border-slate-200 bg-white text-slate-700;
+}
+
+.node--dark {
+  @apply bg-slate-900 text-white;
+}
+
+.node--center {
+  @apply h-16 w-16 rounded-2xl bg-slate-900 text-2xl text-white shadow-md;
+}
+
+.pagination-dots {
+  @apply mb-10 flex items-center gap-1.5;
+}
+
+.dot {
+  @apply h-1.5 w-1.5 rounded-full bg-slate-300;
+}
+
+.dot--active {
+  @apply w-4 bg-slate-900;
+}

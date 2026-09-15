@@ -39,6 +39,14 @@ public class AuthController(IAuthInterface authRepo, ISessionInterface sessionRe
         return Ok(tokens);
     }
 
+    
+    // Callback Google Oauth 2.0
+    public async Task<ActionResult> OauthGoogleCallback()
+    {
+        return Ok();
+    }
+    
+    
     [HttpPost("signin/user-password")]
     public async Task<ActionResult<TokenResponcesDto>> SigninWithUserPassword([FromBody] RegisterRequestDto request)
     {
@@ -92,6 +100,11 @@ public class AuthController(IAuthInterface authRepo, ISessionInterface sessionRe
 
         return NoContent();
     }
+
+
+
+
+
 
     [HttpPost("refrash")]
     public async Task<ActionResult<TokenResponcesDto>> RefrashToken([FromBody] RefreshTokenRequestDto request)

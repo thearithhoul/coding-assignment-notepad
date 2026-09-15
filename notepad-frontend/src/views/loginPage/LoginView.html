@@ -1,0 +1,115 @@
+<div class="auth-page">
+  <div class="auth-panel-form">
+    <div class="auth-form-wrap">
+      <div class="auth-brand-icon">N</div>
+      <h1 class="auth-title">Welcome to Notepad</h1>
+      <p class="auth-subtitle">Please sign in to continue to your notes.</p>
+
+      <div class="auth-social-group">
+        <button type="button" class="btn-social">
+          <span class="btn-social__icon">G</span>
+          Sign in with Google
+        </button>
+      </div>
+
+      <div class="auth-divider"><span>OR</span></div>
+
+      <form class="auth-form" @submit.prevent="onSubmit">
+        <div class="form-field">
+          <label for="username" class="form-label">Email</label>
+          <input
+            id="username"
+            v-model="username"
+            type="text"
+            class="form-input"
+            placeholder="grace@org.com"
+            autocomplete="username"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="password" class="form-label">Password</label>
+          <div class="password-field">
+            <input
+              id="password"
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              class="form-input"
+              autocomplete="current-password"
+              required
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              @click="showPassword = !showPassword"
+            >
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+        </div>
+
+        <p v-if="error" class="form-error">
+          <span class="form-error__icon">!</span> {{ error }}
+        </p>
+
+        <div class="form-row">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="rememberMe" />
+            Remember me
+          </label>
+          <a href="#" class="link-muted">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-primary" :disabled="loading">
+          {{ loading ? 'Signing in...' : 'Continue' }}
+        </button>
+      </form>
+
+      <a href="#" class="link-help">Have trouble signing in?</a>
+    </div>
+
+    <p class="auth-footer">
+      By continuing, you agree to our <a href="#">Terms of Service</a> and
+      <a href="#">Privacy Policy</a>.
+    </p>
+  </div>
+
+  <div class="auth-panel-showcase">
+    <div class="showcase-content">
+      <h2 class="showcase-title">Write &amp; Organize &amp; Sync.</h2>
+      <p class="showcase-subtitle">Capture your ideas and access them anywhere.</p>
+
+      <div class="node-diagram">
+        <svg class="node-diagram__lines" viewBox="0 0 360 360">
+          <line x1="180" y1="180" x2="45" y2="45" />
+          <line x1="180" y1="180" x2="180" y2="45" />
+          <line x1="180" y1="180" x2="315" y2="45" />
+          <line x1="180" y1="180" x2="45" y2="180" />
+          <line x1="180" y1="180" x2="315" y2="180" />
+          <line x1="180" y1="180" x2="45" y2="315" />
+          <line x1="180" y1="180" x2="180" y2="315" />
+          <line x1="180" y1="180" x2="315" y2="315" />
+        </svg>
+
+        <div class="node-diagram__grid">
+          <div class="node node--light">∞</div>
+          <div class="node node--dark">▤</div>
+          <div class="node node--light">◈</div>
+          <div class="node node--dark">◉</div>
+          <div class="node node--center">N</div>
+          <div class="node node--dark">▥</div>
+          <div class="node node--light">✻</div>
+          <div class="node node--dark">$</div>
+          <div class="node node--light">))</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination-dots">
+      <span class="dot"></span>
+      <span class="dot dot--active"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+</div>

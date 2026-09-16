@@ -1,0 +1,26 @@
+<ShellView @new-note="onNewNote">
+  <div class="note-grid">
+    <article
+      v-for="note in notes"
+      :key="note.id"
+      class="note-card group"
+      @click="onOpenNote(note.id)"
+    >
+      <span v-if="note.pinned" class="note-card__pin" v-html="pinIcon"></span>
+
+      <h2 class="note-card__title">{{ note.title }}</h2>
+      <p class="note-card__preview">{{ note.preview }}</p>
+
+      <footer class="note-card__footer">
+        <span class="note-card__date">{{ note.updatedAt }}</span>
+        <button
+          type="button"
+          class="note-card__menu"
+          aria-label="Note actions"
+          @click.stop
+          v-html="menuIcon"
+        ></button>
+      </footer>
+    </article>
+  </div>
+</ShellView>

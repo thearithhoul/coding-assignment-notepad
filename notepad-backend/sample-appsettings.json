@@ -7,11 +7,16 @@
     },
     "AllowedHosts": "*",
     "ConnectionStrings": {
-        "DefaultConnection": "Host=localhost;Port=5432;Database=notepad;Username=notepad;Password=notepad"
+        "DefaultConnection": "Host=localhost;Port=5432;Database=notepad;Username=notepad_app;Password=app123;Trust Server Certificate=true;Search Path=dbo"
     },
     "Jwt": {
         "Issuer": "app-issuer",
         "Audience": "app-audience",
         "SecretKey": "random-base64-key-string"
+    },
+    "Cors": {
+        "AllowedOrigins": [
+            "your-frontend-domain"
+        ]
     }
 }

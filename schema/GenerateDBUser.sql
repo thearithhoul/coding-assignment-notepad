@@ -1,5 +1,3 @@
-
-
 CREATE Role notepad_app with Login password 'app123';
 
 
@@ -25,3 +23,5 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA dbo
     GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO notepad_app;
 ALTER DEFAULT PRIVILEGES IN SCHEMA dbo
     GRANT USAGE, SELECT ON SEQUENCES TO notepad_app;
+
+ALTER ROLE notepad_app SET search_path TO dbo, public;

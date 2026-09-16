@@ -1,0 +1,58 @@
+<div class="shell">
+  <aside class="shell-sidebar">
+    <div class="shell-brand">
+      <span class="shell-brand__mark">N</span>
+      <span class="shell-brand__name">Notepad</span>
+    </div>
+
+    <nav class="shell-nav">
+      <button
+        v-for="item in navItems"
+        :key="item.key"
+        type="button"
+        class="shell-nav__item"
+        :class="{ 'shell-nav__item--active': item.key === activeKey }"
+        @click="activeKey = item.key"
+      >
+        <span class="shell-nav__icon" v-html="icons[item.key]"></span>
+        <span class="shell-nav__label">{{ item.label }}</span>
+        <span class="shell-nav__count">{{ item.count }}</span>
+      </button>
+    </nav>
+
+    <div class="shell-account">
+      <span class="shell-account__avatar" v-html="icons.account"></span>
+      <div class="shell-account__info">
+        <span class="shell-account__label">Account</span>
+        <button type="button" class="shell-account__signout" @click="onSignOut">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="shell-main">
+    <header class="shell-topbar">
+      <h1 class="shell-topbar__title">{{ activeLabel }}</h1>
+
+      <div class="shell-topbar__actions">
+        <label class="shell-search">
+          <span class="shell-search__icon" v-html="icons.search"></span>
+          <input
+            v-model="searchQuery"
+            type="search"
+            class="shell-search__input"
+            placeholder="Search notes"
+          />
+        </label>
+
+        <button type="button" class="shell-new-btn" @click="$emit('new-note')">
+          <span class="shell-new-btn__icon" v-html="icons.plus"></span>
+          New note
+        </button>
+      </div>
+    </header>
+
+    <main class="shell-content">
+      <slot />
+    </main>
+  </div>
+</div>

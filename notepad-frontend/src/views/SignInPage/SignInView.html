@@ -2,29 +2,73 @@
   <div class="auth-panel-form">
     <div class="auth-form-wrap">
       <div class="auth-brand-icon">N</div>
-      <h1 class="auth-title">Welcome to Notepad</h1>
-      <p class="auth-subtitle">Please sign in to continue to your notes.</p>
-
-      <div class="auth-social-group">
-        <button type="button" class="btn-social">
-          <span class="btn-social__icon">G</span>
-          Sign in with Google
-        </button>
-      </div>
-
-      <div class="auth-divider"><span>OR</span></div>
+      <h1 class="auth-title">Create your account</h1>
+      <p class="auth-subtitle">Set up your Notepad account to start writing.</p>
 
       <form class="auth-form" @submit.prevent="onSubmit">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="firstName" class="form-label">First name</label>
+            <input
+              id="firstName"
+              v-model="firstName"
+              type="text"
+              class="form-input"
+              placeholder="Grace"
+              autocomplete="given-name"
+              required
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="lastName" class="form-label">Last name</label>
+            <input
+              id="lastName"
+              v-model="lastName"
+              type="text"
+              class="form-input"
+              placeholder="Hopper"
+              autocomplete="family-name"
+              required
+            />
+          </div>
+        </div>
+
         <div class="form-field">
-          <label for="username" class="form-label">Email</label>
+          <label for="username" class="form-label">Username</label>
           <input
             id="username"
             v-model="username"
             type="text"
             class="form-input"
-            placeholder="grace@org.com"
+            placeholder="gracehopper"
             autocomplete="username"
             required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="email" class="form-label">Email</label>
+          <input
+            id="email"
+            v-model="email"
+            type="email"
+            class="form-input"
+            placeholder="grace@org.com"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="phoneNumber" class="form-label">Phone number</label>
+          <input
+            id="phoneNumber"
+            v-model="phoneNumber"
+            type="tel"
+            class="form-input"
+            placeholder="+1 555 010 1234"
+            autocomplete="tel"
           />
         </div>
 
@@ -36,7 +80,7 @@
               v-model="password"
               :type="showPassword ? 'text' : 'password'"
               class="form-input"
-              autocomplete="current-password"
+              autocomplete="new-password"
               required
             />
             <button
@@ -49,28 +93,39 @@
           </div>
         </div>
 
+        <div class="form-field">
+          <label for="confirmPassword" class="form-label">Confirm password</label>
+          <div class="password-field">
+            <input
+              id="confirmPassword"
+              v-model="confirmPassword"
+              :type="showConfirmPassword ? 'text' : 'password'"
+              class="form-input"
+              autocomplete="new-password"
+              required
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              @click="showConfirmPassword = !showConfirmPassword"
+            >
+              {{ showConfirmPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+        </div>
+
         <p v-if="error" class="form-error">
           <span class="form-error__icon">!</span> {{ error }}
         </p>
 
-        <div class="form-row">
-          <label class="checkbox-label">
-            <input type="checkbox" v-model="rememberMe" />
-            Remember me
-          </label>
-          <a href="#" class="link-muted">Forgot password?</a>
-        </div>
-
         <button type="submit" class="btn-primary" :disabled="loading">
-          {{ loading ? 'Signing in...' : 'Continue' }}
+          {{ loading ? 'Creating account...' : 'Create account' }}
         </button>
       </form>
 
-      <a href="#" class="link-help">Have trouble signing in?</a>
-
       <p class="auth-switch">
-        New here?
-        <router-link to="/signin" class="link-muted">Create an account</router-link>
+        Already have an account?
+        <router-link to="/login" class="link-muted">Sign in</router-link>
       </p>
     </div>
 

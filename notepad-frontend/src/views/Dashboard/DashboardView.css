@@ -1,0 +1,41 @@
+@reference '@/assets/main.css';
+
+.note-grid {
+  @apply grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3;
+}
+
+.note-card {
+  @apply relative flex cursor-pointer flex-col gap-3 rounded-xl border border-slate-200 bg-white p-5 pt-6 transition hover:border-slate-300 hover:shadow-sm;
+}
+
+.note-card__pin {
+  @apply absolute -top-2.5 right-5 flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm;
+}
+
+.note-card__pin svg {
+  @apply h-4 w-4;
+}
+
+.note-card__title {
+  @apply truncate pr-6 text-[15px] font-semibold text-slate-900;
+}
+
+.note-card__preview {
+  @apply line-clamp-3 text-sm leading-relaxed text-slate-500;
+}
+
+.note-card__footer {
+  @apply mt-1 flex items-center justify-between;
+}
+
+.note-card__date {
+  @apply text-xs text-slate-400;
+}
+
+.note-card__menu {
+  @apply flex h-6 w-6 items-center justify-center rounded-md text-slate-300 opacity-0 transition hover:bg-slate-100 hover:text-slate-600 group-hover:opacity-100;
+}
+
+.note-card__menu svg {
+  @apply h-4 w-4;
+}

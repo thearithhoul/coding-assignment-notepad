@@ -1,0 +1,101 @@
+@reference '@/assets/main.css';
+
+.note-page {
+  @apply flex min-h-screen flex-col bg-slate-50;
+}
+
+/* Topbar */
+
+.note-topbar {
+  @apply flex flex-shrink-0 items-center justify-between border-b border-slate-200 bg-white px-6 py-3.5;
+}
+
+.note-topbar__back {
+  @apply flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-900;
+}
+
+.note-topbar__back-icon {
+  @apply flex h-4 w-4 items-center justify-center;
+}
+
+.note-topbar__back-icon svg {
+  @apply h-full w-full;
+}
+
+.note-topbar__actions {
+  @apply flex items-center gap-1;
+}
+
+.note-topbar__status {
+  @apply mr-2 text-xs text-slate-400;
+}
+
+.note-topbar__pin {
+  @apply flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-600;
+}
+
+.note-topbar__pin svg {
+  @apply h-4.5 w-4.5;
+}
+
+.note-topbar__pin--active {
+  @apply text-amber-500 hover:bg-amber-50 hover:text-amber-600;
+}
+
+.note-topbar__menu {
+  @apply relative;
+}
+
+.note-topbar__menu-trigger {
+  @apply flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-600;
+}
+
+.note-topbar__menu-trigger svg {
+  @apply h-4.5 w-4.5;
+}
+
+.note-menu {
+  @apply absolute right-0 top-10 z-10 w-44 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-md;
+}
+
+.note-menu__item {
+  @apply block w-full px-3.5 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-50;
+}
+
+.note-menu__item--danger {
+  @apply text-red-600 hover:bg-red-50;
+}
+
+/* Sheet */
+
+.note-page__body {
+  @apply flex flex-1 justify-center px-4 py-8 sm:px-6 sm:py-10;
+}
+
+.note-sheet {
+  @apply relative flex w-full max-w-3xl flex-col rounded-2xl border border-slate-200 bg-white px-6 pb-8 pt-8 shadow-sm sm:px-14 sm:pb-10 sm:pt-10;
+}
+
+.note-sheet__margin {
+  @apply pointer-events-none absolute left-8 top-8 bottom-8 hidden w-px bg-rose-300 sm:block;
+}
+
+.note-sheet__title {
+  @apply w-full border-0 bg-transparent text-[1.75rem] font-semibold leading-tight text-slate-900 placeholder:text-slate-300 focus:outline-none;
+}
+
+.note-sheet__content {
+  @apply mt-6 min-h-[55vh] w-full flex-1 resize-none border-0 bg-transparent text-base leading-7 text-slate-800 placeholder:text-slate-300 focus:outline-none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent calc(1.75rem - 1px),
+    #e2e8f0 calc(1.75rem - 1px),
+    #e2e8f0 1.75rem
+  );
+  background-position: 0 0.35rem;
+}
+
+.note-sheet__footer {
+  @apply mt-6 self-end text-xs text-slate-400;
+}

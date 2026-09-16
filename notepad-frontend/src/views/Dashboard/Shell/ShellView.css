@@ -1,0 +1,129 @@
+@reference '@/assets/main.css';
+
+.shell {
+  @apply flex h-screen w-full bg-slate-50;
+}
+
+/* Sidebar */
+
+.shell-sidebar {
+  @apply flex w-60 flex-shrink-0 flex-col border-r border-slate-200 bg-white;
+}
+
+.shell-brand {
+  @apply flex items-center gap-2.5 px-5 py-5;
+}
+
+.shell-brand__mark {
+  @apply flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900 text-sm font-semibold text-white;
+}
+
+.shell-brand__name {
+  @apply text-[15px] font-semibold text-slate-900;
+}
+
+.shell-nav {
+  @apply flex flex-1 flex-col gap-0.5 px-3 pt-2;
+}
+
+.shell-nav__item {
+  @apply flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900;
+}
+
+.shell-nav__item--active {
+  @apply bg-slate-900 text-white hover:bg-slate-900 hover:text-white;
+}
+
+.shell-nav__icon {
+  @apply flex h-5 w-5 flex-shrink-0 items-center justify-center;
+}
+
+.shell-nav__icon svg {
+  @apply h-full w-full;
+}
+
+.shell-nav__label {
+  @apply flex-1;
+}
+
+.shell-nav__count {
+  @apply text-xs font-medium text-slate-400;
+}
+
+.shell-nav__item--active .shell-nav__count {
+  @apply text-slate-300;
+}
+
+.shell-account {
+  @apply flex items-center gap-3 border-t border-slate-200 px-4 py-4;
+}
+
+.shell-account__avatar {
+  @apply flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500;
+}
+
+.shell-account__avatar svg {
+  @apply h-4.5 w-4.5;
+}
+
+.shell-account__info {
+  @apply flex min-w-0 flex-1 flex-col;
+}
+
+.shell-account__label {
+  @apply text-sm font-medium text-slate-700;
+}
+
+.shell-account__signout {
+  @apply w-fit text-xs font-medium text-slate-400 transition hover:text-slate-700;
+}
+
+/* Main column */
+
+.shell-main {
+  @apply flex min-w-0 flex-1 flex-col;
+}
+
+.shell-topbar {
+  @apply flex flex-shrink-0 items-center justify-between gap-6 border-b border-slate-200 bg-white px-8 py-4;
+}
+
+.shell-topbar__title {
+  @apply text-xl font-semibold text-slate-900;
+}
+
+.shell-topbar__actions {
+  @apply flex items-center gap-3;
+}
+
+.shell-search {
+  @apply flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 transition focus-within:border-slate-400 focus-within:bg-white;
+}
+
+.shell-search__icon {
+  @apply flex h-4 w-4 flex-shrink-0 items-center justify-center text-slate-400;
+}
+
+.shell-search__icon svg {
+  @apply h-full w-full;
+}
+
+.shell-search__input {
+  @apply w-56 bg-transparent text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none;
+}
+
+.shell-new-btn {
+  @apply flex items-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800;
+}
+
+.shell-new-btn__icon {
+  @apply flex h-4 w-4 items-center justify-center;
+}
+
+.shell-new-btn__icon svg {
+  @apply h-full w-full;
+}
+
+.shell-content {
+  @apply flex-1 overflow-y-auto px-8 py-6;
+}

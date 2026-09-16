@@ -8,19 +8,31 @@ using notepad_backend.Repsitory.Interface;
 using notepad_backend.Repsitory;
 using notepad_backend.Func;
 
-// Map snake_case DB columns (e.g. user_name) to PascalCase entity properties (e.g. Username).
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
+var corsAllowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? throw new InvalidOperationException("Config section 'Cors:AllowedOrigins' was not found.");
+
+const string FrontendCorsPolicy = "FrontendCorsPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(FrontendCorsPolicy, policy =>
+    {
+        policy.WithOrigins(corsAllowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()
     ?? throw new InvalidOperationException("Config section 'Jwt' was not found.");
@@ -32,6 +44,7 @@ builder.Services.AddScoped<IDbConnection>(sp =>
 // Register Server
 builder.Services.AddScoped<IAuthInterface, AuthRepository>();
 builder.Services.AddScoped<ISessionInterface, SessionRepsitory>();
+builder.Services.AddScoped<INotePadInterface, NotePadRepository>();
 builder.Services.AddSingleton<JwtFunc>();
 
 
@@ -65,6 +78,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(FrontendCorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 

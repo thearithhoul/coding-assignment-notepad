@@ -1,0 +1,38 @@
+<div class="note-page">
+  <header class="note-topbar">
+    <button type="button" class="note-topbar__back" @click="onBack">
+      <span class="note-topbar__back-icon" v-html="icons.back"></span>
+      Notes
+    </button>
+
+    <div class="note-topbar__actions">
+      <span class="note-topbar__status">{{ statusLabel }}</span>
+
+      <button type="button" class="note-topbar__pin" :class="{ 'note-topbar__pin--active': pinned }"
+        :aria-pressed="pinned" aria-label="Pin note" @click="onTogglePin" v-html="icons.pin"></button>
+
+      <div class="note-topbar__menu">
+        <button type="button" class="note-topbar__menu-trigger" aria-label="More actions" @click="showMenu = !showMenu"
+          v-html="icons.more"></button>
+
+        <div v-if="showMenu" class="note-menu">
+          <button type="button" class="note-menu__item note-menu__item--danger" @click="onDelete">
+            Delete note
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="note-page__body">
+    <div class="note-sheet">
+      <span class="note-sheet__margin" aria-hidden="true"></span>
+
+      <input v-model="title" type="text" class="note-sheet__title" placeholder="Untitled note" @input="onEdit" />
+
+      <textarea v-model="content" class="note-sheet__content" placeholder="Start writing…" @input="onEdit"></textarea>
+
+      <footer class="note-sheet__footer">{{ wordCountLabel }}</footer>
+    </div>
+  </div>
+</div>

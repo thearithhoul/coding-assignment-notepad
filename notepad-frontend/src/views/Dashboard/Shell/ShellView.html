@@ -12,7 +12,7 @@
         type="button"
         class="shell-nav__item"
         :class="{ 'shell-nav__item--active': item.key === activeKey }"
-        @click="activeKey = item.key"
+        @click="onSelectFilter(item)"
       >
         <span class="shell-nav__icon" v-html="icons[item.key]"></span>
         <span class="shell-nav__label">{{ item.label }}</span>

@@ -165,7 +165,12 @@ public class NotePadController(INotePadInterface notePadRepo) : ControllerBase
             }
 
             var key = parts[0].Trim();
-            var value = parts[1].Trim();
+            var rawValue = parts[1].Trim();
+
+            if (!bool.TryParse(rawValue, out var value))
+            {
+                throw new FormatException($"Unsupported filter value '{rawValue}' for key '{key}'. Expected true/false.");
+            }
 
             result[key] = value;
         }

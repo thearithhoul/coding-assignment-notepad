@@ -25,7 +25,10 @@
   </header>
 
   <div class="note-page__body">
-    <div class="note-sheet">
+    <p v-if="loading" class="note-status">Loading note…</p>
+    <p v-else-if="loadError" class="note-status note-status--error">Couldn't load this note.</p>
+
+    <div v-else class="note-sheet">
       <span class="note-sheet__margin" aria-hidden="true"></span>
 
       <input v-model="title" type="text" class="note-sheet__title" placeholder="Untitled note" @input="onEdit" />

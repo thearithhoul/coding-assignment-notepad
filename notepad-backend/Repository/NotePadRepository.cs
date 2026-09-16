@@ -36,6 +36,8 @@ public class NotePadRepository : INotePadInterface
             param.Add("pageSize", pagesize);
             param.Add("search", search, DbType.String);
 
+            var filteredColumns = new HashSet<string>();
+
             if (filers is not null)
             {
                 foreach (var (key, value) in filers)
@@ -48,7 +50,15 @@ public class NotePadRepository : INotePadInterface
                     var paramName = $"filter_{column}";
                     whereClauses.Add($"{column} = @{paramName}");
                     param.Add(paramName, value);
+                    filteredColumns.Add(column);
                 }
+            }
+
+            // Trashed notes are hidden by default from every view (All/Pinned/etc.) unless the
+            // caller explicitly filters on is_deleted themselves (e.g. the Trash tab).
+            if (!filteredColumns.Contains("is_deleted"))
+            {
+                whereClauses.Add("is_deleted = FALSE");
             }
 
             var where = string.Join(" AND ", whereClauses);

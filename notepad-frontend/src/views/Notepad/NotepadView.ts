@@ -1,4 +1,6 @@
 import { defineComponent } from 'vue'
+import { createNotePadApi, getNotePadDetailApi, removeNotePadApi, updateNotePadApi } from '@/api/notepadapi'
+import type { notedPadsCreateRequestdto } from '@/api/model/notepaddto'
 
 const icons = {
   back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19 8 12l7-7"/></svg>`,
@@ -10,11 +12,15 @@ export default defineComponent({
   name: 'NotepadView',
   data() {
     return {
+      noteId: null as number | null,
       title: '',
       content: '',
       pinned: false,
       showMenu: false,
+      loading: false,
+      loadError: false,
       isSaving: false,
+      saveError: false,
       icons,
       saveTimer: undefined as ReturnType<typeof setTimeout> | undefined,
     }
@@ -28,20 +34,36 @@ export default defineComponent({
       return `${this.wordCount} word${this.wordCount === 1 ? '' : 's'}`
     },
     statusLabel(): string {
-      return this.isSaving ? 'Saving…' : 'All changes saved'
+      if (this.isSaving) {
+        return 'Saving…'
+      }
+      if (this.saveError) {
+        return "Couldn't save — edit again to retry"
+      }
+      return 'All changes saved'
     },
   },
-  created() {
-    const id = this.$route.params.id
-    if (id && id !== 'new') {
-      this.title = 'Trip to Kyoto — packing list'
-      this.content =
-        'Passport, rail pass, the good walking shoes, adapter, gift for the Tanakas, spare SD cards.\n\nCheck in with Aya about the ryokan address before we land — last time the taxi driver had no idea.'
-      this.pinned = true
+  async created() {
+    const routeId = this.$route.params.id
+    if (routeId && routeId !== 'new') {
+      this.loading = true
+      try {
+        const notepad = await getNotePadDetailApi(Number(routeId))
+        this.noteId = notepad.id
+        this.title = notepad.title
+        this.content = notepad.detail.content
+        this.pinned = notepad.isPinned
+      } catch {
+        this.loadError = true
+      } finally {
+        this.loading = false
+      }
     }
   },
   beforeUnmount() {
-    if (this.saveTimer) clearTimeout(this.saveTimer)
+    if (this.saveTimer) {
+      clearTimeout(this.saveTimer)
+    }
   },
   methods: {
     onBack() {
@@ -49,16 +71,53 @@ export default defineComponent({
     },
     onEdit() {
       this.isSaving = true
-      if (this.saveTimer) clearTimeout(this.saveTimer)
+      if (this.saveTimer) {
+        clearTimeout(this.saveTimer)
+      }
       this.saveTimer = setTimeout(() => {
-        this.isSaving = false
+        this.save()
       }, 700)
+    },
+    async save() {
+      const payload: notedPadsCreateRequestdto = {
+        title: this.title.trim() || 'Untitled note',
+        subTitle: this.content.trim().slice(0, 140),
+        isPinned: this.pinned,
+        detail: { content: this.content },
+      }
+
+      this.isSaving = true
+      try {
+        if (this.noteId === null) {
+          const created = await createNotePadApi(payload)
+          this.noteId = created.id
+          this.$router.replace(`/notes/${created.id}`)
+        } else {
+          await updateNotePadApi(this.noteId, payload)
+        }
+        this.saveError = false
+      } catch {
+        this.saveError = true
+      } finally {
+        this.isSaving = false
+      }
     },
     onTogglePin() {
       this.pinned = !this.pinned
+      if (this.saveTimer) {
+        clearTimeout(this.saveTimer)
+      }
+      this.save()
     },
-    onDelete() {
+    async onDelete() {
       this.showMenu = false
+      if (this.noteId !== null) {
+        try {
+          await removeNotePadApi(this.noteId)
+        } catch {
+          return
+        }
+      }
       this.$router.push('/')
     },
   },

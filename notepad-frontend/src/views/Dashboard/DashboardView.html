@@ -1,5 +1,9 @@
 <ShellView @new-note="onNewNote">
-  <div class="note-grid">
+  <p v-if="loading" class="note-status">Loading notes…</p>
+  <p v-else-if="error" class="note-status note-status--error">{{ error }}</p>
+  <p v-else-if="notes.length === 0" class="note-status">No notes here yet.</p>
+
+  <div v-else class="note-grid">
     <article
       v-for="note in notes"
       :key="note.id"

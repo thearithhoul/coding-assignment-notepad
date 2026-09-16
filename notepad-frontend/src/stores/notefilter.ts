@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 export const useNoteFilterStore = defineStore("filterNote", () => {
-  const currFilter = ref(1);
+  const currFilter = ref(0);
+  const search = ref("");
 
   const filterKey = computed<string | null>(() => {
     switch (currFilter.value) {
@@ -19,5 +20,9 @@ export const useNoteFilterStore = defineStore("filterNote", () => {
     currFilter.value = filter;
   }
 
-  return { currFilter, filterKey, setFilter };
+  function setSearch(value: string) {
+    search.value = value;
+  }
+
+  return { currFilter, search, filterKey, setFilter, setSearch };
 });

@@ -19,6 +19,7 @@ builder.Services.AddOpenApi();
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<OauthSetting>(builder.Configuration.GetSection("Oauth"));
 
 var corsAllowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
     ?? throw new InvalidOperationException("Config section 'Cors:AllowedOrigins' was not found.");
@@ -46,6 +47,7 @@ builder.Services.AddScoped<IAuthInterface, AuthRepository>();
 builder.Services.AddScoped<ISessionInterface, SessionRepsitory>();
 builder.Services.AddScoped<INotePadInterface, NotePadRepository>();
 builder.Services.AddSingleton<JwtFunc>();
+builder.Services.AddHttpClient();
 
 
 // Authentication Middleware

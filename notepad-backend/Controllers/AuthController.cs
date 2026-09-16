@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using notepad_backend.Config;
 using notepad_backend.Dto;
 using notepad_backend.Entities;
 using notepad_backend.Func;
@@ -9,7 +11,11 @@ namespace notepad_backend.Controllers;
 
 [ApiController]
 [Route("api/v1/auth")]
-public class AuthController(IAuthInterface authRepo, ISessionInterface sessionRepo, JwtFunc jwtFunc) : ControllerBase
+public class AuthController(IAuthInterface authRepo,
+ ISessionInterface sessionRepo,
+  JwtFunc jwtFunc,
+  IHttpClientFactory factory,
+  IOptions<OauthSetting> oauthOptions) : ControllerBase
 {
     [HttpPost("login/user-password")]
     public async Task<ActionResult<TokenResponcesDto>> LoginWithUserPassword([FromBody] LoginRequestDto request)
@@ -41,9 +47,33 @@ public class AuthController(IAuthInterface authRepo, ISessionInterface sessionRe
 
     
     // Callback Google Oauth 2.0
-    public async Task<ActionResult> OauthGoogleCallback()
+    [HttpGet("login/google/callback")]
+    public async Task<ActionResult> OauthGoogleCallback([FromQuery] string code)
     {
-        return Ok();
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            return BadRequest("Missing authorization code.");
+        }
+
+        var oauth = oauthOptions.Value;
+        var payload = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["client_id"] = oauth.ClientId,
+            ["client_secret"] = oauth.ClientSecret,
+            ["code"] = code,
+            ["grant_type"] = "authorization_code",
+            ["redirect_uri"] = oauth.Redirect,
+        });
+
+        var client = factory.CreateClient();
+        var response = await client.PostAsync("https://oauth2.googleapis.com/token", payload);
+        if (!response.IsSuccessStatusCode)
+        {
+            return Unauthorized("Failed to exchange authorization code with Google.");
+        }
+
+        var tokenResponse = await response.Content.ReadFromJsonAsync<GoogleTokenResponseDto>();
+        return Ok(tokenResponse);
     }
     
     

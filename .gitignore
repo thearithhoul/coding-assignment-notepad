@@ -60,3 +60,4 @@ Thumbs.db
 # env
 /notepad-backend/appsettings*.json
 .env
+/env/appsettings.json

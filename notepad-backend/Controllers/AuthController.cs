@@ -6,6 +6,7 @@ using notepad_backend.Dto;
 using notepad_backend.Entities;
 using notepad_backend.Func;
 using notepad_backend.Repsitory.Interface;
+using notepad_backend.Services;
 
 namespace notepad_backend.Controllers;
 
@@ -15,10 +16,21 @@ public class AuthController(IAuthInterface authRepo,
  ISessionInterface sessionRepo,
   JwtFunc jwtFunc,
   IHttpClientFactory factory,
-  IOptions<OauthSetting> oauthOptions) : ControllerBase
+  IOptions<OauthSetting> oauthOptions,
+  GoogleOauthEndpointService googleauthService
+  ) : ControllerBase
 {
+
+    /*
+    AuthType : 
+    0 = user-password login
+    1 = google oauth 
+    ... etc.
+    */
+
+
     [HttpPost("login/user-password")]
-    public async Task<ActionResult<TokenResponcesDto>> LoginWithUserPassword([FromBody] LoginRequestDto request)
+    public async Task<ActionResult<TokenResponseDto>> LoginWithUserPassword([FromBody] LoginRequestDto request)
     {
         if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
         {
@@ -30,22 +42,22 @@ public class AuthController(IAuthInterface authRepo,
         {
             return Unauthorized("Invalid username or password.");
         }
-
         if (!user.IsActive)
         {
             return Unauthorized("This account is deactivated.");
         }
-
         if (!HashFunc.VerifyPassword(request.Password, user.PasswordSalt, user.PasswordHash))
         {
             return Unauthorized("Invalid username or password.");
         }
 
-        var tokens = await IssueTokensAsync(user);
+        var tokens = await IssueTokensAsync(user, 0);
         return Ok(tokens);
     }
 
-    
+
+
+
     // Callback Google Oauth 2.0
     [HttpGet("login/google/callback")]
     public async Task<ActionResult> OauthGoogleCallback([FromQuery] string code)
@@ -65,20 +77,31 @@ public class AuthController(IAuthInterface authRepo,
             ["redirect_uri"] = oauth.Redirect,
         });
 
+        string tokenEndpoint = googleauthService.Discovery.Issuer + googleauthService.Discovery.TokenEndpoint;
+
         var client = factory.CreateClient();
-        var response = await client.PostAsync("https://oauth2.googleapis.com/token", payload);
+        var response = await client.PostAsync(tokenEndpoint, payload);
         if (!response.IsSuccessStatusCode)
         {
             return Unauthorized("Failed to exchange authorization code with Google.");
         }
 
-        var tokenResponse = await response.Content.ReadFromJsonAsync<GoogleTokenResponseDto>();
+        var tokenResponse = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+
+        tokenResponse?.AuthType = 1;
         return Ok(tokenResponse);
     }
-    
-    
+
+    // Google Refrash Token
+    [HttpPost("google/refrash")]
+    public async Task<ActionResult> OauthGoogleRefrashToken([FromBody] RefreshTokenRequestDto request)
+    {
+        return Ok();
+    }
+
+
     [HttpPost("signin/user-password")]
-    public async Task<ActionResult<TokenResponcesDto>> SigninWithUserPassword([FromBody] RegisterRequestDto request)
+    public async Task<ActionResult<TokenResponseDto>> SigninWithUserPassword([FromBody] RegisterRequestDto request)
     {
         if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
         {
@@ -115,7 +138,7 @@ public class AuthController(IAuthInterface authRepo,
             return Problem("Failed to create user.");
         }
 
-        var tokens = await IssueTokensAsync(createdUser);
+        var tokens = await IssueTokensAsync(createdUser, 0);
         return Ok(tokens);
     }
 
@@ -133,11 +156,8 @@ public class AuthController(IAuthInterface authRepo,
 
 
 
-
-
-
     [HttpPost("refrash")]
-    public async Task<ActionResult<TokenResponcesDto>> RefrashToken([FromBody] RefreshTokenRequestDto request)
+    public async Task<ActionResult<TokenResponseDto>> RefrashToken([FromBody] RefreshTokenRequestDto request)
     {
         var session = await sessionRepo.GetSessionByRefreshToken(request.RefreshToken);
         if (session is null)
@@ -153,7 +173,7 @@ public class AuthController(IAuthInterface authRepo,
 
         await sessionRepo.RevokeSessionById(session.Id);
 
-        var tokens = await IssueTokensAsync(user);
+        var tokens = await IssueTokensAsync(user, request.AuthType);
         return Ok(tokens);
     }
 
@@ -185,7 +205,7 @@ public class AuthController(IAuthInterface authRepo,
         return Ok(user);
     }
 
-    private async Task<TokenResponcesDto> IssueTokensAsync(AppUserEntity user)
+    private async Task<TokenResponseDto> IssueTokensAsync(AppUserEntity user, int auth_type)
     {
         var accessToken = jwtFunc.GenerateToken(isRefrash: false, user);
         var refreshToken = jwtFunc.GenerateToken(isRefrash: true, user);
@@ -200,13 +220,15 @@ public class AuthController(IAuthInterface authRepo,
             RefreshTokenExpiry = refreshTokenExpiry,
         });
 
-        return new TokenResponcesDto
+        return new TokenResponseDto
         {
             AccessToken = accessToken,
             RefreshToken = refreshToken,
             TokenType = "Bearer",
             ExpiresIn = 1800,
             ExpiresAt = expiresAt,
+            AuthType = auth_type,
+
         };
     }
 }

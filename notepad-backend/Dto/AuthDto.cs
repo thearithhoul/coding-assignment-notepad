@@ -3,14 +3,6 @@ using System.Text.Json.Serialization;
 namespace notepad_backend.Dto;
 
 
-public class TokenResponcesDto
-{
-    public string AccessToken { get; set; } = string.Empty;
-    public string TokenType { get; set; } = "Bearer";
-    public int ExpiresIn { get; set; }
-    public string RefreshToken { get; set; } = string.Empty;
-    public DateTime ExpiresAt { get; set; }
-}
 
 public class LoginRequestDto
 {
@@ -31,9 +23,10 @@ public class RegisterRequestDto
 public class RefreshTokenRequestDto
 {
     public string RefreshToken { get; set; } = string.Empty;
+    public int AuthType { get; set; }
 }
 
-public class GoogleTokenResponseDto
+public class TokenResponseDto
 {
     [JsonPropertyName("access_token")]
     public string AccessToken { get; set; } = string.Empty;
@@ -52,4 +45,12 @@ public class GoogleTokenResponseDto
 
     [JsonPropertyName("id_token")]
     public string? IdToken { get; set; }
+
+    [JsonPropertyName("expires_at")]
+    public DateTime ExpiresAt { get; set; }
+
+    [JsonPropertyName("auth_type")]
+
+    public int AuthType { get; set; }
+
 }

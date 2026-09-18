@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using notepad_backend.Repsitory.Interface;
 using notepad_backend.Repsitory;
 using notepad_backend.Func;
+using notepad_backend.Services;
 
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
@@ -48,6 +49,7 @@ builder.Services.AddScoped<ISessionInterface, SessionRepsitory>();
 builder.Services.AddScoped<INotePadInterface, NotePadRepository>();
 builder.Services.AddSingleton<JwtFunc>();
 builder.Services.AddHttpClient();
+builder.Services.AddSingleton<GoogleOauthEndpointService>();
 
 
 // Authentication Middleware
